@@ -15,7 +15,7 @@ void keyboard(unsigned char key, int x, int y)
 
     if (key == 'n' || key == 'N') glClearColor(0.0f, 0.0f, 0.3f, 1.0f); //night
 
-    if (key == 'l' || key == 'L') glClearColor(0.5f, 0.8f, 1.0f, 1.0f); //light
+    if (key == 'l' || key == 'L') glClearColor(0.5f, 0.8f, 1.0f, 1.0f); //day
 
 
     if (key == 27) exit(0);
