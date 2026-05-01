@@ -4,7 +4,6 @@
 bool isNight = false;
 
 void Background() {
-
     glClearColor(0.5f, 0.8f, 1.0f, 1.0f); //Day
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -41,7 +40,6 @@ void drawCircle(float cx, float cy, float radius, float r, float g, float b) {
 void drawSquare(float x, float y, float size, float r, float g, float b) {
     glColor3f(r, g, b);
     glBegin(GL_QUADS);
-
         glVertex2f(x - size/2, y - size/2);
         glVertex2f(x + size/2, y - size/2);
         glVertex2f(x + size/2, y + size/2);
@@ -49,36 +47,69 @@ void drawSquare(float x, float y, float size, float r, float g, float b) {
     glEnd();
 }
 
+void drawHouse(float x, float y)
+{
+    
+    glColor3f(0.96f, 0.87f, 0.70f);
+    glBegin(GL_QUADS);
+        glVertex2f(x-60, y);
+        glVertex2f(x+60, y);
+        glVertex2f(x+60, y+80);
+        glVertex2f(x-60, y+80);
+    glEnd();
+
+    
+    glColor3f(0.4f, 0.0f, 0.0f);
+    glBegin(GL_TRIANGLES);
+        glVertex2f(x-80, y+80);
+        glVertex2f(x+80, y+80);
+        glVertex2f(x, y+140);
+    glEnd();
+
+    
+    glColor3f(0.25f, 0.13f, 0.05f);
+    glBegin(GL_QUADS);
+        glVertex2f(x-15, y);
+        glVertex2f(x+15, y);
+        glVertex2f(x+15, y+50);
+        glVertex2f(x-15, y+50);
+    glEnd();
+
+    
+    glColor3f(0.7f, 0.9f, 1.0f);
+    glBegin(GL_QUADS);
+        glVertex2f(x-45, y+40);
+        glVertex2f(x-20, y+40);
+        glVertex2f(x-20, y+65);
+        glVertex2f(x-45, y+65);
+    glEnd();
+
+    
+    glBegin(GL_QUADS);
+        glVertex2f(x+20, y+40);
+        glVertex2f(x+45, y+40);
+        glVertex2f(x+45, y+65);
+        glVertex2f(x+20, y+65);
+    glEnd();
+}
 
 void Draw()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    if (!isNight) {  //sun
-
+    
+    if (!isNight) {
         drawCircle(150, 150, 50, 1.0f, 1.0f, 0.0f);
-    }
-    else {           //moon
-
+    } else {
         drawCircle(150, 150, 50, 0.9f, 0.9f, 0.9f);
-
         drawCircle(170, 150, 50, 0.0f, 0.0f, 0.2f);
     }
 
-    //Ground
-    drawSquare(0,-500,600,0,0.6,0);
+    
+    drawSquare(0, -500, 600, 0, 0.6, 0);
 
-
-
-
-
-
-
-
-
-
-
-
+    drawHouse(-180, -200);
+    drawHouse(180, -200);
 
     glFlush();
 }
@@ -99,3 +130,4 @@ int main(int argc, char *argv[])
     glutMainLoop();
     return 0;
 }
+
