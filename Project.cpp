@@ -7,7 +7,7 @@ void Background() {
     glClearColor(0.5f, 0.8f, 1.0f, 1.0f); //Day
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-300, 300, -300, 300);
+    gluOrtho2D(-450, 450, -300, 300);
 }
 
 void keyboard(unsigned char key, int x, int y)
@@ -49,7 +49,7 @@ void drawSquare(float x, float y, float size, float r, float g, float b) {
 
 void drawHouse(float x, float y)
 {
-    
+    //Main Square
     glColor3f(0.96f, 0.87f, 0.70f);
     glBegin(GL_QUADS);
         glVertex2f(x-60, y);
@@ -58,7 +58,7 @@ void drawHouse(float x, float y)
         glVertex2f(x-60, y+80);
     glEnd();
 
-    
+    //Triangle
     glColor3f(0.4f, 0.0f, 0.0f);
     glBegin(GL_TRIANGLES);
         glVertex2f(x-80, y+80);
@@ -66,17 +66,22 @@ void drawHouse(float x, float y)
         glVertex2f(x, y+140);
     glEnd();
 
-    
+    //Door
     glColor3f(0.25f, 0.13f, 0.05f);
     glBegin(GL_QUADS);
         glVertex2f(x-15, y);
         glVertex2f(x+15, y);
         glVertex2f(x+15, y+50);
         glVertex2f(x-15, y+50);
-    glEnd();
-
     
-    glColor3f(0.7f, 0.9f, 1.0f);
+    glEnd();
+    if (isNight) {
+        glColor3f(1.0f, 1.0f, 0.0f);
+    } else {
+        glColor3f(0.7f, 0.9f, 1.0f);
+    }
+
+    //L window
     glBegin(GL_QUADS);
         glVertex2f(x-45, y+40);
         glVertex2f(x-20, y+40);
@@ -84,7 +89,7 @@ void drawHouse(float x, float y)
         glVertex2f(x-45, y+65);
     glEnd();
 
-    
+    //R window
     glBegin(GL_QUADS);
         glVertex2f(x+20, y+40);
         glVertex2f(x+45, y+40);
@@ -97,19 +102,32 @@ void Draw()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    
+
     if (!isNight) {
-        drawCircle(150, 150, 50, 1.0f, 1.0f, 0.0f);
+        drawCircle(300, 200, 50, 1.0f, 1.0f, 0.0f);
     } else {
-        drawCircle(150, 150, 50, 0.9f, 0.9f, 0.9f);
-        drawCircle(170, 150, 50, 0.0f, 0.0f, 0.2f);
+        drawCircle(300, 200, 50, 0.9f, 0.9f, 0.9f);
+        drawCircle(320, 200, 50, 0.0f, 0.0f, 0.2f);
     }
 
-    
-    drawSquare(0, -500, 600, 0, 0.6, 0);
+    //Ground
+    drawSquare(0, -600, 900, 0, 0.6, 0);
 
-    drawHouse(-180, -200);
-    drawHouse(180, -200);
+
+    //Houses
+    drawHouse(140, -200);
+    drawHouse(340, -200);
+
+    //Tree
+    glColor3f(0.25f, 0.13f, 0.05f);
+    glBegin(GL_QUADS);
+        glVertex2f(-60, -40);
+        glVertex2f(-40, -40);
+        glVertex2f(-40, -200);
+        glVertex2f(-60, -200);
+    glEnd();
+    drawCircle(-50,-60,40,0,0.6,0);
+
 
     glFlush();
 }
@@ -119,7 +137,7 @@ int main(int argc, char *argv[])
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowPosition(100, 100);
-    glutInitWindowSize(600, 600);
+    glutInitWindowSize(900, 600);
     glutCreateWindow("Project");
 
     Background();
@@ -130,4 +148,3 @@ int main(int argc, char *argv[])
     glutMainLoop();
     return 0;
 }
-
