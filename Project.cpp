@@ -3,6 +3,7 @@
 
 bool isNight = false;
 float angle = 0.0f;
+float cloudX = -400; // بداية من الشمال
 
 void Background() {
     glClearColor(0.5f, 0.8f, 1.0f, 1.0f); //Day
@@ -37,7 +38,47 @@ void drawCircle(float cx, float cy, float radius, float r, float g, float b) {
     }
     glEnd();
 }
+void drawCloud(float x, float y) {
+    drawCircle(x, y, 20, 1, 1, 1);
+    drawCircle(x+20, y+10, 25, 1, 1, 1);
+    drawCircle(x+40, y, 20, 1, 1, 1);
+}
+void update() {
+    cloudX += 0.06; // سرعة الحركة
 
+    if (cloudX > 450) {
+        cloudX = -450; // ترجع من الأول
+    }
+
+    glutPostRedisplay();
+}
+
+void drawWindmill(float x, float y) {
+    // البرج
+   glColor3f(0.4f, 0.2f, 0.0f);
+    glBegin(GL_QUADS);
+        glVertex2f(x - 15, y); glVertex2f(x + 15, y);
+        glVertex2f(x + 10, y + 120); glVertex2f(x - 10, y + 120);
+    glEnd();
+
+        glPushMatrix();
+    glTranslatef(x, y + 120, 0);
+    glRotatef(angle, 0, 0, 1);
+  glColor3f(0.8f, 0.8f, 0.8f);
+    for (int i = 0; i < 4; i++) {
+        glRotatef(90, 0, 0, 1);
+        glBegin(GL_QUADS);
+            glVertex2f(-5, 0); glVertex2f(5, 0);
+            glVertex2f(5, 80); glVertex2f(-5, 80);
+        glEnd();
+    }
+    glPopMatrix();
+}
+void timer(int v) {
+    angle += 2.0f;
+    glutPostRedisplay();
+    glutTimerFunc(16, timer, 0);
+}
 
 void drawHouse(float x, float y)
 {
@@ -89,11 +130,7 @@ void drawHouse(float x, float y)
     glEnd();
 }
 
-void timer(int v) {
-    angle += 2.0f;
-    glutPostRedisplay();
-    glutTimerFunc(16, timer, 0);
-}
+
 
 void Draw()
 {
@@ -102,6 +139,8 @@ void Draw()
 
     if (!isNight) {
         drawCircle(300, 200, 50, 1.0f, 1.0f, 0.0f);
+        drawCloud(cloudX, 200);
+        drawCloud(cloudX + 200, 230);
     } else { //moon
         drawCircle(300, 200, 50, 0.9f, 0.9f, 0.9f);
         drawCircle(320, 200, 50, 0.0f, 0.0f, 0.2f);
@@ -117,71 +156,26 @@ void Draw()
     glEnd();
 
     //Houses
-    drawHouse(140, -200);
-    drawHouse(340, -200);
+   drawHouse(-350, -200);
+drawHouse(340, -200);
+    drawWindmill(0, -200);
 
-    //Tree
-     glColor3f(0.25f, 0.13f, 0.05f);
-    glBegin(GL_QUADS);
-        glVertex2f(-60, -40);
-        glVertex2f(-40, -40);
-        glVertex2f(-40, -200);
-        glVertex2f(-60, -200);
-    glEnd();
-        drawCircle(-50,-60,40,0,0.6,0);
+   // Tree
+glColor3f(0.4f, 0.2f, 0.0f);
+glBegin(GL_QUADS);
+    glVertex2f(-220, -40);
+    glVertex2f(-200, -40);
+    glVertex2f(-200, -200);
+    glVertex2f(-220, -200);
+glEnd();
 
-    //Windmill
+drawCircle(-210, -50, 35, 0, 0.6, 0);
+drawCircle(-210, -20, 30, 0, 0.7, 0);
+drawCircle(-180, -50, 30, 0, 0.6, 0);
+drawCircle(-240, -50, 30, 0, 0.6, 0);
+drawCircle(-210, -80, 25, 0, 0.5, 0);
+        glFlush();
 
-    glPushMatrix();
-    glTranslatef(50, 0, 0);
-
-
-      glColor3f(0.0f, 0.0f, 0.0f);
-    glBegin(GL_QUADS);
-        glVertex2f(-269, 1);
-        glVertex2f(-351, 1);
-        glVertex2f(-351, -199);
-        glVertex2f(-269, -199);
-    glEnd();
-      glColor3f(1.0f, 1.0f, 1.0f);
-    glBegin(GL_QUADS);
-        glVertex2f(-270, 0);
-        glVertex2f(-350, 0);
-        glVertex2f(-350, -200);
-        glVertex2f(-270, -200);
-    glEnd();
-     glColor3f(1.0f, 0.0f, 0.0f);
-    glBegin(GL_TRIANGLES);
-        glVertex2f(-360, 0);
-        glVertex2f(-260, 0);
-        glVertex2f(-310, 60);
-    glEnd();
-
-      glColor3f(0.25f, 0.13f, 0.05f);
-    glBegin(GL_QUADS);
-        glVertex2f(-285, -200);
-        glVertex2f(-330, -200);
-        glVertex2f(-330, -140);
-        glVertex2f(-285, -140);
-    glEnd();
-
-      glPushMatrix();
-    glTranslatef(-310, 20, 0);
-    glRotatef(angle, 0, 0, 1);
-  glColor3f(0.8f, 0.8f, 0.8f);
-    for (int i = 0; i < 4; i++) {
-        glRotatef(90, 0, 0, 1);
-        glBegin(GL_QUADS);
-            glVertex2f(-5, 0); glVertex2f(5, 0);
-            glVertex2f(5, 100); glVertex2f(-5, 100);
-        glEnd();
-    }
-    glPopMatrix();
-    glPopMatrix();
-
-
-
-    glFlush();
 }
 
 int main(int argc, char *argv[])
@@ -193,6 +187,7 @@ int main(int argc, char *argv[])
     glutCreateWindow("Project");
 
     Background();
+    glutIdleFunc(update);
 
     glutDisplayFunc(Draw);
     glutKeyboardFunc(keyboard);
