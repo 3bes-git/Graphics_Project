@@ -2,12 +2,13 @@
 #include <math.h>
 
 bool isNight = false;
+float angle = 0.0f;
 
 void Background() {
     glClearColor(0.5f, 0.8f, 1.0f, 1.0f); //Day
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-450, 450, -300, 300);
+    gluOrtho2D(-450, 450, -300, 300); //900*600
 }
 
 void keyboard(unsigned char key, int x, int y)
@@ -37,15 +38,6 @@ void drawCircle(float cx, float cy, float radius, float r, float g, float b) {
     glEnd();
 }
 
-void drawSquare(float x, float y, float size, float r, float g, float b) {
-    glColor3f(r, g, b);
-    glBegin(GL_QUADS);
-        glVertex2f(x - size/2, y - size/2);
-        glVertex2f(x + size/2, y - size/2);
-        glVertex2f(x + size/2, y + size/2);
-        glVertex2f(x - size/2, y + size/2);
-    glEnd();
-}
 
 void drawHouse(float x, float y)
 {
@@ -73,7 +65,6 @@ void drawHouse(float x, float y)
         glVertex2f(x+15, y);
         glVertex2f(x+15, y+50);
         glVertex2f(x-15, y+50);
-    
     glEnd();
     if (isNight) {
         glColor3f(1.0f, 1.0f, 0.0f);
@@ -98,6 +89,12 @@ void drawHouse(float x, float y)
     glEnd();
 }
 
+void timer(int v) {
+    angle += 2.0f;
+    glutPostRedisplay();
+    glutTimerFunc(16, timer, 0);
+}
+
 void Draw()
 {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -105,28 +102,83 @@ void Draw()
 
     if (!isNight) {
         drawCircle(300, 200, 50, 1.0f, 1.0f, 0.0f);
-    } else {
+    } else { //moon
         drawCircle(300, 200, 50, 0.9f, 0.9f, 0.9f);
         drawCircle(320, 200, 50, 0.0f, 0.0f, 0.2f);
     }
 
     //Ground
-    drawSquare(0, -600, 900, 0, 0.6, 0);
-
+      glColor3f(0, 0.6, 0);
+    glBegin(GL_QUADS);
+        glVertex2f( -450, -1050);
+        glVertex2f(450, -1050);
+        glVertex2f(450, -150);
+        glVertex2f(-450, -150);
+    glEnd();
 
     //Houses
     drawHouse(140, -200);
     drawHouse(340, -200);
 
     //Tree
-    glColor3f(0.25f, 0.13f, 0.05f);
+     glColor3f(0.25f, 0.13f, 0.05f);
     glBegin(GL_QUADS);
         glVertex2f(-60, -40);
         glVertex2f(-40, -40);
         glVertex2f(-40, -200);
         glVertex2f(-60, -200);
     glEnd();
-    drawCircle(-50,-60,40,0,0.6,0);
+        drawCircle(-50,-60,40,0,0.6,0);
+
+    //Windmill
+
+    glPushMatrix();
+    glTranslatef(50, 0, 0);
+
+
+      glColor3f(0.0f, 0.0f, 0.0f);
+    glBegin(GL_QUADS);
+        glVertex2f(-269, 1);
+        glVertex2f(-351, 1);
+        glVertex2f(-351, -199);
+        glVertex2f(-269, -199);
+    glEnd();
+      glColor3f(1.0f, 1.0f, 1.0f);
+    glBegin(GL_QUADS);
+        glVertex2f(-270, 0);
+        glVertex2f(-350, 0);
+        glVertex2f(-350, -200);
+        glVertex2f(-270, -200);
+    glEnd();
+     glColor3f(1.0f, 0.0f, 0.0f);
+    glBegin(GL_TRIANGLES);
+        glVertex2f(-360, 0);
+        glVertex2f(-260, 0);
+        glVertex2f(-310, 60);
+    glEnd();
+
+      glColor3f(0.25f, 0.13f, 0.05f);
+    glBegin(GL_QUADS);
+        glVertex2f(-285, -200);
+        glVertex2f(-330, -200);
+        glVertex2f(-330, -140);
+        glVertex2f(-285, -140);
+    glEnd();
+
+      glPushMatrix();
+    glTranslatef(-310, 20, 0);
+    glRotatef(angle, 0, 0, 1);
+  glColor3f(0.8f, 0.8f, 0.8f);
+    for (int i = 0; i < 4; i++) {
+        glRotatef(90, 0, 0, 1);
+        glBegin(GL_QUADS);
+            glVertex2f(-5, 0); glVertex2f(5, 0);
+            glVertex2f(5, 100); glVertex2f(-5, 100);
+        glEnd();
+    }
+    glPopMatrix();
+    glPopMatrix();
+
 
 
     glFlush();
@@ -144,6 +196,7 @@ int main(int argc, char *argv[])
 
     glutDisplayFunc(Draw);
     glutKeyboardFunc(keyboard);
+    glutTimerFunc(0, timer, 0);
 
     glutMainLoop();
     return 0;
